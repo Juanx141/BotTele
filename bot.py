@@ -24,5 +24,6 @@ if __name__ == '__main__':
     app = ApplicationBuilder().token(TOKEN).build()
     handler = MessageHandler(filters.TEXT & filters.Regex(r'^/s/[^/]+/[^/]+'), handle_replace_command)
     app.add_handler(handler)
+    print("Bot iniciado correctamente...")
     app.run_polling()
-    
+
