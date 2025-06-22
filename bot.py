@@ -1,7 +1,7 @@
 import os
 import re
 from telegram import Update
-from telegram.ext import ApplicationBuilder, MessageHandler, filters, ContextTypes
+from telegram.ext import ApplicationBuilder, MessageHandler, CommandHandler, filters, ContextTypes
 
 TOKEN = os.getenv("TOKEN")
 
@@ -21,14 +21,16 @@ async def handle_replace_command(update: Update, context: ContextTypes.DEFAULT_T
     await message.reply_text(texto_nuevo)
 
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("Olamiamol")
-
+    await update.message.reply_text("¡Hola! Soy tu bot.")
 
 if __name__ == '__main__':
-    app = ApplicationBuilder().token(TOKEN).build()
-    handler = MessageHandler(filters.TEXT & filters.Regex(r'^/s/[^/]+/[^/]+'), handle_replace_command)
-    app.add_handler(handler)
-    app.add_handler(CommandHandler("start", start))
-    print("Bot iniciado correctamente..")
-    app.run_polling()
+    if not TOKEN:
+        print("TOKEN no definido en variables de entorno")
+        exit(1)
 
+    app = ApplicationBuilder().token(TOKEN).build()
+    app.add_handler(CommandHandler("start", start)) 
+    app.add_handler(MessageHandler(filters.TEXT & filters.Regex(r'^/s/[^/]+/[^/]+'), handle_replace_command))  # Luego /s
+
+    print("Bot iniciado correctamente...")
+    app.run_polling()
