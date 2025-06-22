@@ -10,7 +10,7 @@ async def handle_replace_command(update: Update, context: ContextTypes.DEFAULT_T
     if not message.reply_to_message:
         return
 
-    match = re.match("Quisiste decir: "r'^/s/([^/]+)/([^/]+)$', message.text.strip())
+    match = re.match(r'^/s/([^/]+)/([^/]+)$', message.text.strip())
     if not match:
         return
 
