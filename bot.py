@@ -1,7 +1,7 @@
 import os
 import re
 from telegram import Update
-from telegram.ext import ApplicationBuilder, MessageHandler, CommandHandler, filters, ContextTypes
+from telegram.ext import ApplicationBuilder, MessageHandler, filters, ContextTypes
 
 TOKEN = os.getenv("TOKEN")
 
@@ -10,7 +10,7 @@ async def handle_replace_command(update: Update, context: ContextTypes.DEFAULT_T
     if not message.reply_to_message:
         return
 
-    match = re.match(r'^/s/([^/]+)/([^/]+)$', message.text.strip())
+    match = re.match("Quisiste decir: "r'^/s/([^/]+)/([^/]+)$', message.text.strip())
     if not match:
         return
 
@@ -20,17 +20,10 @@ async def handle_replace_command(update: Update, context: ContextTypes.DEFAULT_T
 
     await message.reply_text(texto_nuevo)
 
-async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await update.message.reply_text("¡Hola! Soy tu bot.")
-
 if __name__ == '__main__':
-    if not TOKEN:
-        print("TOKEN no definido en variables de entorno")
-        exit(1)
-
     app = ApplicationBuilder().token(TOKEN).build()
-    app.add_handler(CommandHandler("start", start)) 
-    app.add_handler(MessageHandler(filters.TEXT & filters.Regex(r'^/s/[^/]+/[^/]+'), handle_replace_command))  # Luego /s
-
-    print("Bot iniciado correctamente...")
+    handler = MessageHandler(filters.TEXT & filters.Regex(r'^/s/[^/]+/[^/]+'), handle_replace_command)
+    app.add_handler(handler)
+    print("Bot iniciado correctamente..")
     app.run_polling()
+
