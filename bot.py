@@ -10,7 +10,7 @@ async def handle_replace_command(update: Update, context: ContextTypes.DEFAULT_T
     if not message.reply_to_message:
         return
 
-    match = re.match(r'^/s/([^/]+)/([^/]+)$', message.text.strip())
+    match = re.match("Quisiste decir: "r'^/s/([^/]+)/([^/]+)$', message.text.strip())
     if not match:
         return
 
@@ -20,10 +20,15 @@ async def handle_replace_command(update: Update, context: ContextTypes.DEFAULT_T
 
     await message.reply_text(texto_nuevo)
 
+async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    await update.message.reply_text("Olamiamol")
+
+
 if __name__ == '__main__':
     app = ApplicationBuilder().token(TOKEN).build()
     handler = MessageHandler(filters.TEXT & filters.Regex(r'^/s/[^/]+/[^/]+'), handle_replace_command)
     app.add_handler(handler)
+    app.add_handler(CommandHandler("start", start))
     print("Bot iniciado correctamente..")
     app.run_polling()
 
